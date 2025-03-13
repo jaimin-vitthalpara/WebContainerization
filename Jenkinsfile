@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    environment {
+        AWS_ACCOUNT_ID = "533267023710"
+        AWS_REGION = "us-east-1"
+        REPO_URL = "533267023710.dkr.ecr.us-east-1.amazonaws.com/website"
+        IMAGE_TAG = "latest"
+    }
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image using the Dockerfile in your local folder
+                    dockerImage = docker.build("website:${IMAGE_TAG}")
+                }
+            }
+        }
+        stage('Login to AWS ECR') {
+            steps {
+                script {
+                    // Authenticate Docker to the AWS ECR
+                    sh '''
+                    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REPO_URL}
+                    '''
+                }
+            }
+        }
+        stage('Tag and Push Docker Image to ECR') {
+            steps {
+                script {
+                    // Tag the image for ECR
+                    dockerImage.tag("${REPO_URL}:${IMAGE_TAG}")
+                    
+                    // Push the Docker image to ECR
+                    dockerImage.push("${REPO_URL}:${IMAGE_TAG}")
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Docker Image has been successfully pushed to AWS ECR!'
+        }
+        failure {
+            echo 'The pipeline failed.'
+        }
+    }
+}

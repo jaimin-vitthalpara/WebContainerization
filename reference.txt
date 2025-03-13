@@ -1,0 +1,5 @@
+Download PDF File on Button Click using JQuery :- 
+https://codingdiksha.com/download-pdf-file-button-click-jquery/  
+
+add menu active class when scrolling to div :- 
+https://codepen.io/LukeD1uk/pen/MVeGQW 
