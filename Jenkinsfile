@@ -33,7 +33,7 @@ pipeline {
 
                         // Authenticate Docker to AWS ECR
                         sh '''
-                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REPO_URL}
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 533267023710.dkr.ecr.us-east-1.amazonaws.com/portfolio-website-repo
                         '''
                     }
                 }
