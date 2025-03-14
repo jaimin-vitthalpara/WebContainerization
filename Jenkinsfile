@@ -3,15 +3,16 @@ pipeline {
     environment {
         AWS_ACCOUNT_ID = "533267023710"
         AWS_REGION = "us-east-1"
-        REPO_URL = "533267023710.dkr.ecr.us-east-1.amazonaws.com/website"
+        REPO_URL = "533267023710.dkr.ecr.us-east-1.amazonaws.com/portfolio-website-repo"
         IMAGE_TAG = "latest"
+        IMAGE_NAME = "my-portfolio-web"
     }
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
                     // Build the Docker image using the Dockerfile in your local folder
-                    dockerImage = docker.build("website:${IMAGE_TAG}")
+                    dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                 }
             }
         }
