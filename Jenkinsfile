@@ -34,7 +34,7 @@ pipeline {
         stage('Tag and Push Docker Image to ECR') {
             steps {
                 script {
-                    // Tag the image for ECR
+                    // Correctly tag the Docker image for ECR
                     dockerImage.tag("${REPO_URL}:${IMAGE_TAG}")
                     
                     // Push the Docker image to ECR
