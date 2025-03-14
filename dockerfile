@@ -1,5 +1,5 @@
 # Use an official Nginx image to serve your site
-FROM nginx:alpine
+FROM nginx
 
 # Copy the website files to the Nginx web root directory
 COPY . /usr/share/nginx/html
