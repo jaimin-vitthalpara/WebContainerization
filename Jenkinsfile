@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCOUNT_ID = "533267023710"
+        AWS_ACCOUNT_ID = "1234567890"
         AWS_REGION = "us-east-1"
         REPO_URL = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/portfolio-website-repo"
         IMAGE_TAG = "latest"
@@ -33,7 +33,7 @@ pipeline {
 
                         // Authenticate Docker to AWS ECR
                         sh '''
-                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 533267023710.dkr.ecr.us-east-1.amazonaws.com/portfolio-website-repo
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 1234567890.dkr.ecr.us-east-1.amazonaws.com/portfolio-website-repo
                         '''
                     }
                 }
