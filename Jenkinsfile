@@ -13,6 +13,7 @@ pipeline {
                 script {
                     // Build the Docker image using the Dockerfile in your local folder
                     dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                    echo "Docker Image built: ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
@@ -38,14 +39,26 @@ pipeline {
                 }
             }
         }
-        stage('Tag and Push Docker Image to ECR') {
+        stage('Tag Docker Image') {
             steps {
                 script {
-                    // Correctly tag the Docker image for ECR
-                    dockerImage.tag("${REPO_URL}:${IMAGE_TAG}")
+                    // Log the current Docker image and the target ECR repository
+                    echo "Tagging Docker image ${IMAGE_NAME}:${IMAGE_TAG} as ${REPO_URL}:${IMAGE_TAG}"
                     
+                    // Correctly tag the Docker image for ECR
+                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REPO_URL}:${IMAGE_TAG}"
+                    
+                    echo "Docker image tagged successfully."
+                }
+            }
+        }
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
                     // Push the Docker image to ECR
-                    dockerImage.push("${REPO_URL}:${IMAGE_TAG}")
+                    sh "docker push ${REPO_URL}:${IMAGE_TAG}"
+                    
+                    echo "Docker image pushed to ECR: ${REPO_URL}:${IMAGE_TAG}"
                 }
             }
         }
