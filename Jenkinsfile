@@ -3,7 +3,7 @@ pipeline {
     environment {
         AWS_ACCOUNT_ID = "533267023710"
         AWS_REGION = "us-east-1"
-        REPO_URL = "533267023710.dkr.ecr.us-east-1.amazonaws.com/portfolio-website-repo"
+        REPO_URL = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/portfolio-website-repo"
         IMAGE_TAG = "latest"
         IMAGE_NAME = "my-portfolio-web"
     }
@@ -23,7 +23,14 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'AWS_CREDENTIALS', 
                                                       usernameVariable: 'AWS_ACCESS_KEY_ID', 
                                                       passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        // Authenticate Docker to the AWS ECR
+                        // Configure AWS CLI for Jenkins job
+                        sh '''
+                        aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+                        aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+                        aws configure set default.region ${AWS_REGION}
+                        '''
+
+                        // Authenticate Docker to AWS ECR
                         sh '''
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REPO_URL}
                         '''
